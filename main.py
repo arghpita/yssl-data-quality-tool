@@ -25,7 +25,7 @@ def main():
     print()
     
     # Step 1: Load Data
-    print("📊 Step 1: Loading dataset...")
+    print("Step 1: Loading dataset...")
     loader = DataLoader()
     
     # Create sample data (replace with real data loading if available)
@@ -35,11 +35,11 @@ def main():
     print()
     
     # Step 2: Analyze Quality
-    print("🔍 Step 2: Analyzing data quality...")
+    print("Step 2: Analyzing data quality...")
     analyzer = QualityAnalyzer(df)
     scores = analyzer.analyze_all()
     
-    print("\n📈 Quality Scores:")
+    print("\nQuality Scores:")
     print(f"  • Overall:       {scores['overall']:.2f}/5")
     print(f"  • Accuracy:      {scores['accuracy']:.2f}/5")
     print(f"  • Completeness:  {scores['completeness']:.2f}/5")
@@ -49,7 +49,7 @@ def main():
     print()
     
     # Step 3: Generate Visualizations
-    print("📊 Step 3: Generating visualizations...")
+    print("Step 3: Generating visualizations...")
     viz = QualityVisualizer(output_dir='outputs')
     
     try:
@@ -63,8 +63,8 @@ def main():
     
     print()
     print("=" * 60)
-    print("✅ Analysis Complete!")
-    print(f"📁 Results saved in: ./outputs/")
+    print("Analysis Complete!")
+    print(f"Results saved in: ./outputs/")
     print("=" * 60)
 
 if __name__ == "__main__":
