@@ -104,3 +104,121 @@ class QualityVisualizer:
         plt.close()
         print(f"✓ Saved {filepath}")
         return filepath
+    
+    def plot_violations_by_type(self, df, type_column='ViolationType', 
+                                title="Employment Violations by Type"):
+        """Create pie chart for violation types"""
+        
+        fig, ax = plt.subplots(figsize=(10, 8))
+        
+        type_counts = df[type_column].value_counts()
+        colors = ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e']
+        
+        wedges, texts, autotexts = ax.pie(
+            type_counts.values,
+            labels=type_counts.index,
+            autopct='%1.1f%%',
+            colors=colors[:len(type_counts)],
+            startangle=90,
+            textprops={'fontsize': 12, 'fontweight': 'bold'}
+        )
+        
+        ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
+        
+        plt.tight_layout()
+        filepath = f'{self.output_dir}/violations_by_type.png'
+        plt.savefig(filepath, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"✓ Saved {filepath}")
+        return filepath
+    
+    def plot_violations_by_year(self, df, year_column='Year',
+                                title="Employment Violations by Year (Ontario)"):
+        """Create line chart for yearly trends"""
+        
+        fig, ax = plt.subplots(figsize=(12, 6))
+        
+        yearly_counts = df[year_column].value_counts().sort_index()
+        
+        ax.plot(yearly_counts.index, yearly_counts.values, 
+                marker='o', linewidth=3, markersize=8,
+                color='#8b5cf6')
+        
+        ax.set_xlabel('Year', fontsize=12, fontweight='bold')
+        ax.set_ylabel('Number of Violations', fontsize=12, fontweight='bold')
+        ax.set_title(title, fontsize=14, fontweight='bold')
+        ax.grid(True, alpha=0.3)
+        
+        # Add value labels
+        for year, count in yearly_counts.items():
+            ax.text(year, count + max(yearly_counts.values) * 0.02,
+                   f'{count:,}', ha='center', va='bottom', fontsize=9)
+        
+        plt.tight_layout()
+        filepath = f'{self.output_dir}/violations_by_year.png'
+        plt.savefig(filepath, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"✓ Saved {filepath}")
+        return filepath
+    
+    def plot_geographic_distribution(self, df, location_column='City',
+                                     title="Violations by City (Ontario)"):
+        """Create bar chart for geographic distribution"""
+        
+        fig, ax = plt.subplots(figsize=(12, 6))
+        
+        location_counts = df[location_column].value_counts().head(10)
+        
+        bars = ax.bar(range(len(location_counts)), location_counts.values,
+                      color='#3b82f6', alpha=0.8, edgecolor='black')
+        
+        # Highlight Toronto (first bar)
+        bars[0].set_color('#10b981')
+        
+        ax.set_xticks(range(len(location_counts)))
+        ax.set_xticklabels(location_counts.index, rotation=45, ha='right')
+        ax.set_ylabel('Number of Violations', fontsize=12, fontweight='bold')
+        ax.set_title(title, fontsize=14, fontweight='bold')
+        
+        # Add value labels
+        for i, (loc, count) in enumerate(location_counts.items()):
+            ax.text(i, count + max(location_counts.values) * 0.01,
+                   f'{count:,}', ha='center', va='bottom', fontsize=10)
+        
+        plt.tight_layout()
+        filepath = f'{self.output_dir}/geographic_distribution.png'
+        plt.savefig(filepath, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"✓ Saved {filepath}")
+        return filepath
+    
+    def plot_ip_composition(self, composition_dict, title="IP Dataset Composition"):
+        """Create donut chart for IP composition"""
+        
+        fig, ax = plt.subplots(figsize=(10, 8))
+        
+        labels = list(composition_dict.keys())
+        sizes = list(composition_dict.values())
+        colors = ['#3b82f6', '#8b5cf6', '#ec4899']
+        
+        wedges, texts, autotexts = ax.pie(
+            sizes,
+            labels=labels,
+            autopct='%1.1f%%',
+            colors=colors[:len(sizes)],
+            startangle=90,
+            textprops={'fontsize': 12, 'fontweight': 'bold'}
+        )
+        
+        # Add donut hole
+        centre_circle = plt.Circle((0, 0), 0.70, fc='white')
+        fig.gca().add_artist(centre_circle)
+        
+        ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
+        
+        plt.tight_layout()
+        filepath = f'{self.output_dir}/ip_composition.png'
+        plt.savefig(filepath, dpi=300, bbox_inches='tight')
+        plt.close()
+        print(f"✓ Saved {filepath}")
+        return filepath
